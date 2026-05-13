@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taux Hypothécaires — Émulsion</title>
+<link rel="icon" type="image/png" href="https://emulsionhypotheque.ca/wp-content/uploads/2024/09/favicon_EMLS-300x300.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow:       #FFC500;
+  --yellow-deep:  #E5B100;
+  --yellow-soft:  #FFF4CC;
+  --yellow-ghost: #FFFBE6;
+  --ink:          #1e1e2e;
+  --ink-soft:     #2a2a3d;
+  --ink-muted:    #4a4a5e;
+  --stone:        #6b6b7a;
+  --stone-soft:   #9a9aab;
+  --gray:         #f5f5f7;
+  --gray-soft:    #fafafb;
+  --border:       #e6e6ec;
+  --border-strong:#d4d4dd;
+  --white:        #ffffff;
+  --shadow-sm:    0 1px 3px rgba(30,30,46,0.06);
+  --shadow-md:    0 8px 24px rgba(30,30,46,0.10);
+  --shadow-lg:    0 20px 48px rgba(30,30,46,0.18);
+  --radius:       12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Outfit', sans-serif; background: var(--gray); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+/* HEADER — dark navy with yellow accent */
+.header { background: var(--ink); color: var(--white); padding: 0 2.5rem; height: 76px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(30,30,46,0.15); border-bottom: 3px solid var(--yellow); }
+.header-logo img { height: 42px; width: auto; display: block; filter: brightness(0) invert(1); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-pill { background: var(--yellow); color: var(--ink); font-size: 10px; font-weight: 800; padding: 7px 16px; border-radius: 100px; letter-spacing: 0.16em; text-transform: uppercase; }
+.header-update { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 500; }
+
+/* HERO — white with yellow geometric pattern */
+.hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 280px; background-image:
+  radial-gradient(circle, var(--yellow) 1.5px, transparent 1.5px);
+  background-size: 14px 14px; opacity: 0.4; mask-image: linear-gradient(to left, black, transparent); -webkit-mask-image: linear-gradient(to left, black, transparent); pointer-events: none; }
+.hero::after { content: '+'; position: absolute; top: 30px; right: 80px; font-size: 48px; color: var(--yellow); font-weight: 700; opacity: 0.6; transform: rotate(15deg); pointer-events: none; }
+.hero-content { position: relative; z-index: 1; }
+.hero h1 { font-family: 'Outfit', sans-serif; font-size: 48px; color: var(--ink); line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; }
+.hero h1 em { color: var(--ink); font-style: normal; font-weight: 800; background: linear-gradient(180deg, transparent 65%, var(--yellow) 65%, var(--yellow) 95%, transparent 95%); padding: 0 4px; }
+.hero-sub { font-size: 15px; color: var(--stone); margin-top: 12px; font-weight: 400; max-width: 540px; line-height: 1.5; }
+
+.container { max-width: 1400px; margin: 0 auto; padding: 2rem 2.5rem; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 2rem; }
+.stat { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.75rem; transition: box-shadow 0.25s, transform 0.25s; position: relative; overflow: hidden; }
+.stat::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--ink); }
+.stat:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.stat.hero-stat { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.stat.hero-stat::after { background: var(--yellow); height: 4px; }
+.stat.hero-stat::before { content: '+'; position: absolute; top: 8px; right: 14px; font-size: 28px; color: var(--yellow); font-weight: 700; opacity: 0.5; }
+.stat-label { font-size: 11px; font-weight: 700; color: var(--stone); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px; }
+.stat.hero-stat .stat-label { color: var(--yellow); }
+.stat-val { font-size: 36px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat.hero-stat .stat-val { color: var(--yellow); }
+.stat-sub { font-size: 12px; color: var(--stone); margin-top: 10px; font-weight: 500; }
+.stat.hero-stat .stat-sub { color: rgba(255,255,255,0.7); }
+
+/* FILTERS */
+.filters-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; box-shadow: var(--shadow-sm); }
+.filter-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-group label { font-size: 10px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.14em; }
+select { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 34px 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--white); color: var(--ink); cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231e1e2e' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; min-width: 140px; transition: all 0.15s; }
+select:focus, select:hover { border-color: var(--ink); box-shadow: 0 0 0 3px var(--yellow-soft); }
+.btn-reset { font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; padding: 10px 22px; border: none; border-radius: 8px; background: var(--yellow); color: var(--ink); cursor: pointer; transition: all 0.15s; align-self: flex-end; letter-spacing: 0.04em; text-transform: uppercase; }
+.btn-reset:hover { background: var(--yellow-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,197,0,0.4); }
+
+/* TABS */
+.tabs-wrap { display: flex; margin-bottom: 1.5rem; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 5px; width: fit-content; box-shadow: var(--shadow-sm); }
+.tab { padding: 10px 24px; font-size: 13px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--stone); border-radius: 7px; transition: all 0.2s; white-space: nowrap; letter-spacing: 0.01em; }
+.tab:hover:not(.active) { color: var(--ink); background: var(--gray); }
+.tab.active { background: var(--ink); color: var(--yellow); }
+
+/* TERME HEADERS */
+.terme-hdr { display: flex; align-items: center; gap: 12px; margin: 2.25rem 0 1rem; }
+.terme-bar { width: 5px; height: 28px; background: var(--yellow); border-radius: 2px; flex-shrink: 0; }
+.terme-label { font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--ink); font-weight: 700; letter-spacing: -0.015em; }
+.terme-count { font-size: 11px; color: var(--ink-muted); font-weight: 700; background: var(--yellow-ghost); border: 1px solid var(--yellow-soft); padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* SECTIONS */
+.section-wrap { margin-bottom: 2.75rem; }
+.section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 1rem; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
+.section-name { font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--ink); font-weight: 700; letter-spacing: -0.015em; }
+
+/* TABLES */
+.tbl-wrap { overflow-x: auto; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); margin-bottom: 1.5rem; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead tr { background: var(--ink); }
+th { text-align: left; padding: 13px 18px; font-size: 10px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.14em; white-space: nowrap; }
+td { padding: 13px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.12s; }
+tbody tr:hover td { background: var(--yellow-ghost); }
+.preteur-cell { display: flex; align-items: center; gap: 12px; }
+.logo-box { width: 68px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--white); border: 1px solid var(--border); border-radius: 7px; flex-shrink: 0; padding: 5px; }
+.logo-box img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
+.logo-box-lg { width: 88px; height: 48px; }
+.preteur-name { font-weight: 600; font-size: 13px; color: var(--ink); white-space: nowrap; }
+
+/* BUTTONS */
+.btn-courriel { font-size: 11px; font-weight: 700; padding: 6px 14px; border: none; border-radius: 20px; background: var(--yellow); color: var(--ink); cursor: pointer; transition: all 0.15s; white-space: nowrap; font-family: 'Outfit', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
+.btn-courriel:hover { background: var(--yellow-deep); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(255,197,0,0.5); }
+
+/* BADGES */
+.badge { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; letter-spacing: 0.04em; text-transform: uppercase; font-family: 'Outfit', sans-serif; }
+.b-fixe     { background: var(--ink); color: var(--yellow); }
+.b-var      { background: var(--yellow); color: var(--ink); }
+.b-assure   { background: #e8f5e9; color: #1b5e20; }
+.b-assur2   { background: #e3f2fd; color: #0d47a1; }
+.b-conv     { background: #f0eef5; color: var(--ink-muted); }
+.b-nonass   { background: #fce4ec; color: #880e4f; }
+
+/* RATES */
+.tv { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.t-abs { color: var(--ink); }
+.t-neg { color: #1b8f5c; }
+.t-pos { color: #c04c00; }
+
+/* CHIPS */
+.chip { display: inline-block; font-size: 11px; font-weight: 500; color: var(--stone); background: var(--gray); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.chip-na { color: var(--stone-soft); font-style: italic; border-color: transparent; background: transparent; }
+
+/* STATES */
+.empty { text-align: center; padding: 5rem 2rem; color: var(--stone); }
+.empty-ico { font-size: 36px; margin-bottom: 12px; }
+.empty p { font-size: 14px; }
+.loading-wrap { text-align: center; padding: 5rem 2rem; color: var(--stone); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.spinner { width: 22px; height: 22px; border: 3px solid var(--gray); border-top-color: var(--yellow); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-wrap { padding: 2rem; color: #c62828; font-size: 13px; background: #fff5f5; border-radius: var(--radius); border: 1px solid #ffcdd2; text-align: center; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30,30,46,0.65); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(3px); }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); overflow: hidden; }
+.modal-header { padding: 1.5rem 1.75rem 1rem; background: var(--ink); color: var(--white); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-shrink: 0; position: relative; }
+.modal-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--yellow); }
+.modal-header-info { flex: 1; }
+.modal-preteur { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.modal-preteur-name { font-family: 'Outfit', sans-serif; font-size: 22px; color: var(--white); font-weight: 700; letter-spacing: -0.01em; }
+.modal-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.modal-meta-item { font-size: 12px; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; }
+.modal-meta-item strong { color: var(--yellow); font-weight: 700; }
+.modal-close { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 19px; color: var(--white); transition: all 0.15s; flex-shrink: 0; }
+.modal-close:hover { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
+.modal-body { flex: 1; overflow-y: auto; padding: 1.5rem 1.75rem; background: var(--white); }
+.modal-email-frame { width: 100%; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--white); }
+.modal-empty { text-align: center; padding: 3rem; color: var(--stone); font-size: 14px; }
+
+@media (max-width: 768px) {
+  .header { padding: 0 1.25rem; height: 64px; }
+  .header-logo img { height: 32px; }
+  .hero { padding: 2rem 1.25rem 1.75rem; }
+  .hero::before { width: 140px; }
+  .hero::after { right: 20px; top: 15px; font-size: 32px; }
+  .hero h1 { font-size: 32px; }
+  .container { padding: 1.5rem 1.25rem; }
+  .stats { grid-template-columns: 1fr; gap: 10px; }
+  .stat { padding: 1.1rem 1.25rem; }
+  .stat-val { font-size: 28px; }
+  select { min-width: 110px; font-size: 12px; }
+  th, td { padding: 10px 13px; font-size: 12px; }
+  .logo-box { width: 56px; height: 32px; }
+  .tabs-wrap { width: 100%; }
+  .tab { flex: 1; text-align: center; padding: 9px 8px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <img src="https://emulsionhypotheque.ca/wp-content/uploads/2024/09/EMULSION_HYPO_LOGO-1.png" alt="Émulsion Hypothèque"
+         onerror="this.parentElement.innerHTML='<span style=\'font-family:Outfit,sans-serif;font-size:22px;color:#ffffff;font-weight:800;letter-spacing:-0.02em\'>ÉMULSION</span>'">
+  </div>
+  <div class="header-right">
+    <span class="header-pill">Courtiers</span>
+    <span class="header-update" id="last-update">Chargement...</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-content">
+    <h1>Taux <em>hypothécaires</em></h1>
+    <p class="hero-sub">Comparez les taux de nos prêteurs partenaires, mis à jour en temps réel.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Prêteurs actifs</div>
+      <div class="stat-val" id="stat-preteurs">—</div>
+    </div>
+    <div class="stat hero-stat">
+      <div class="stat-label">Taux le plus bas</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+        <div id="stat-min-logo"></div>
+        <div class="stat-val" id="stat-min">—</div>
+      </div>
+      <div class="stat-sub" id="stat-min-preteur">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Dernière mise à jour</div>
+      <div class="stat-val" id="stat-date" style="font-size:20px;letter-spacing:-0.01em">—</div>
+    </div>
+  </div>
+
+  <div class="filters-card">
+    <div class="filter-group"><label>Terme</label><select id="f-terme"><option value="">Tous</option></select></div>
+    <div class="filter-group"><label>Type de taux</label>
+      <select id="f-type"><option value="">Tous</option><option value="fixe">Fixe</option><option value="variable">Variable</option></select>
+    </div>
+    <div class="filter-group"><label>Transaction</label><select id="f-transaction"><option value="">Tous</option></select></div>
+    <div class="filter-group"><label>RPV</label><select id="f-rpv"><option value="">Tous</option></select></div>
+    <div class="filter-group"><label>Prêteur</label><select id="f-preteur"><option value="">Tous</option></select></div>
+    <button class="btn-reset" onclick="resetFilters()">↺ Réinitialiser</button>
+  </div>
+
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="switchTab('comparaison',this)">Comparaison</button>
+    <button class="tab" onclick="switchTab('grille',this)">Par prêteur</button>
+    <button class="tab" onclick="switchTab('historique',this)">Historique</button>
+  </div>
+
+  <div id="tab-comparaison"></div>
+  <div id="tab-grille" style="display:none"></div>
+  <div id="tab-historique" style="display:none"></div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <div class="modal-preteur">
+          <div id="modal-logo"></div>
+          <span class="modal-preteur-name" id="modal-preteur-name">—</span>
+        </div>
+        <div class="modal-meta" id="modal-meta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModalBtn()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="modal-empty">Chargement...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://oitfhcjqjgeupvosyqja.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pdGZoY2pxamdldXB2b3N5cWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MzIwOTMsImV4cCI6MjA5MTEwODA5M30.KxIjHqNvMs2WTfUp7fgTuES1cbWsijTCHhVjlN6g4aE';
+const TAUX_COLS = 'preteur,produit,type_transaction,type_taux,terme,taux,rpv,cote_credit,amortissement,montant_financement,date_effectif,source_email';
+
+const LOGOS = {
+  'TD':              'logos/td.png',
+  'CIBC':            'logos/cibc.jpg',
+  'Desjardins':      'logos/desjardins.png',
+  'Scotia':          'logos/scotiabank.png',
+  'Banque Nationale':'logos/bnc.png',
+  'First National':  'logos/first-national.png',
+  'MERIX':           'logos/merix.png',
+  'MCAP':            'logos/mcap.png',
+  'Wiseday':         'logos/wiseday.png',
+  'CMLS':            'logos/cmls.png',
+  'Manuvie':         'logos/manuvie.png',
+  'Haventree':       'logos/haventree.png',
+  'B2B':             'logos/b2b.png',
+  'Équitable':       'logos/equitable.png',
+  'Home Trust':      'logos/hometrust.png',
+};
+
+let allData = [], courriels = {}, historiqueCourrielsByKey = {}, activeTab = 'comparaison';
+
+async function fetchAllPages(baseUrl) {
+  let rows = [];
+  let offset = 0;
+  const PAGE = 1000;
+  while (true) {
+    const res = await fetch(`${baseUrl}&limit=${PAGE}&offset=${offset}`, {
+      headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
+    });
+    if (!res.ok) throw new Error('Erreur API ' + res.status);
+    const page = await res.json();
+    rows = rows.concat(page);
+    if (page.length < PAGE) break;
+    offset += PAGE;
+  }
+  return rows;
+}
+
+async function fetchData() {
+  document.getElementById('tab-comparaison').innerHTML =
+    '<div class="loading-wrap"><div class="spinner"></div>Chargement des taux...</div>';
+  try {
+    const [allRows, courrielsList] = await Promise.all([
+      fetchAllPages(`${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc,terme.asc`),
+      fetch(`${SUPA_URL}/rest/v1/derniers_courriels?select=*`, {
+        headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` }
+      }).then(r => r.json()),
+    ]);
+
+    courrielsList.forEach(c => { courriels[c.preteur] = c; });
+
+    try {
+      const histList = await fetch(
+        `${SUPA_URL}/rest/v1/historique_courriels?select=*&order=date_effectif.desc`,
+        { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } }
+      ).then(r => r.json());
+      histList.forEach(c => {
+        const key = `${c.preteur}|||${c.date_effectif}`;
+        if (!historiqueCourrielsByKey[key]) historiqueCourrielsByKey[key] = c;
+      });
+    } catch(e) {}
+
+    allData = filterLatestDates(allRows);
+    initFilters(); updateStats(); render();
+    document.getElementById('last-update').textContent =
+      `${allData.length} entrées · ${new Date().toLocaleString('fr-CA')}`;
+  } catch(e) {
+    document.getElementById('tab-comparaison').innerHTML =
+      `<div class="error-wrap">Impossible de charger les données.<br><small>${e.message}</small></div>`;
+    document.getElementById('last-update').textContent = 'Erreur de connexion';
+  }
+}
+
+function filterLatestDates(data) {
+  const latest = {};
+  data.forEach(r => {
+    if (!r.date_effectif) return;
+    if (!latest[r.preteur] || r.date_effectif > latest[r.preteur]) latest[r.preteur] = r.date_effectif;
+  });
+  return data.filter(r => r.date_effectif && r.date_effectif === latest[r.preteur]);
+}
+
+function getF() {
+  return {
+    terme: document.getElementById('f-terme').value,
+    type:  document.getElementById('f-type').value,
+    trans: document.getElementById('f-transaction').value,
+    rpv:   document.getElementById('f-rpv').value,
+    pret:  document.getElementById('f-preteur').value,
+  };
+}
+
+function filtered() {
+  const f = getF();
+  return allData.filter(r =>
+    (!f.terme || r.terme === f.terme) &&
+    (!f.type  || r.type_taux === f.type) &&
+    (!f.trans || r.type_transaction === f.trans) &&
+    (!f.rpv   || r.rpv === f.rpv) &&
+    (!f.pret  || r.preteur === f.pret)
+  );
+}
+
+function resetFilters() {
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  updateStats(); render();
+}
+
+const TO = ['6 mois','1 an','1 an convertible','2 ans','3 ans','4 ans','5 ans','6 ans','7 ans','10 ans','variable'];
+function sT(a,b) {
+  const ia=TO.indexOf(a), ib=TO.indexOf(b);
+  if(ia<0&&ib<0) return (a||'').localeCompare(b||'');
+  if(ia<0) return 1; if(ib<0) return -1; return ia-ib;
+}
+
+function initFilters() {
+  const uniq = k => [...new Set(allData.map(r=>r[k]).filter(Boolean))];
+  const pop = (id, items) => {
+    const s = document.getElementById(id);
+    items.forEach(v => { const o=document.createElement('option'); o.value=v; o.textContent=v; s.appendChild(o); });
+  };
+  pop('f-terme',       uniq('terme').sort(sT));
+  pop('f-transaction', uniq('type_transaction').sort());
+  pop('f-rpv',         uniq('rpv').sort());
+  pop('f-preteur',     uniq('preteur').sort());
+  ['f-terme','f-type','f-transaction','f-rpv','f-preteur'].forEach(id =>
+    document.getElementById(id).addEventListener('change', () => { updateStats(); render(); })
+  );
+}
+
+function updateStats() {
+  const d = filtered();
+  const pts = new Set(d.map(r=>r.preteur));
+  const fx  = d.filter(r => r.type_taux==='fixe' && parseFloat(r.taux)>1);
+  const min = fx.length ? fx.reduce((a,b)=>parseFloat(a.taux)<=parseFloat(b.taux)?a:b) : null;
+  const lat = d.reduce((a,b)=>((a.date_effectif||'')>=(b.date_effectif||'')?a:b),{});
+  document.getElementById('stat-preteurs').textContent = pts.size||'—';
+  document.getElementById('stat-min').textContent      = min ? parseFloat(min.taux).toFixed(2)+'%' : '—';
+  document.getElementById('stat-min-preteur').textContent = min ? '↳ '+min.preteur : '';
+  document.getElementById('stat-date').textContent     = lat.date_effectif||'—';
+  const logoEl = document.getElementById('stat-min-logo');
+  if (min && LOGOS[min.preteur]) {
+    logoEl.innerHTML = `<div class="logo-box" style="background:#ffffff;border-color:rgba(255,197,0,0.4)"><img src="${LOGOS[min.preteur]}" alt="${min.preteur}" onerror="this.parentElement.style.display='none'"></div>`;
+  } else { logoEl.innerHTML = ''; }
+}
+
+function logo(p, lg) {
+  const src = LOGOS[p];
+  const cls = 'logo-box'+(lg?' logo-box-lg':'');
+  if (!src) return `<div class="${cls}" style="background:transparent;border:none"></div>`;
+  return `<div class="${cls}"><img src="${src}" alt="${p}" onerror="this.parentElement.style.visibility='hidden'"></div>`;
+}
+
+function btnCourriel(preteur) {
+  if (!courriels[preteur]) return '';
+  return `<button class="btn-courriel" onclick="openModal('${preteur.replace(/'/g,"\\'")}')">📧 Courriel</button>`;
+}
+
+function fT(t, type) {
+  if (t==null) return '<span style="color:#ddd">—</span>';
+  const n = parseFloat(t);
+  if (type==='variable') {
+    const s = n>=0?'+':'', cls = n<0?'t-neg':'t-pos';
+    return `<span class="tv ${cls}">P${s}${n.toFixed(2)}%</span>`;
+  }
+  return `<span class="tv t-abs">${n.toFixed(2)}%</span>`;
+}
+
+function bTy(t) {
+  return t==='fixe'
+    ? '<span class="badge b-fixe">Fixe</span>'
+    : '<span class="badge b-var">Variable</span>';
+}
+
+function bTr(t) {
+  const m = {
+    'assuré':       ['b-assure','Assuré'],
+    'assurable':    ['b-assur2','Assurable'],
+    'conventionnel':['b-conv','Conventionnel'],
+    'non assurable':['b-nonass','Non assurable']
+  };
+  const [c,l] = m[t]||['b-conv', t||'—'];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+
+function ch(v) {
+  return v ? `<span class="chip">${v}</span>` : '<span class="chip-na">—</span>';
+}
+
+function switchTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['comparaison','grille','historique'].forEach(t =>
+    document.getElementById('tab-'+t).style.display = t===tab?'':'none'
+  );
+  render();
+}
+
+function render() {
+  if (activeTab==='comparaison') renderComp();
+  else if (activeTab==='grille') renderGrille();
+  else renderHist();
+}
+
+function renderComp() {
+  const data = filtered(), el = document.getElementById('tab-comparaison');
+  if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+  const g = {};
+  data.forEach(r => { const k=`${r.terme}|||${r.type_taux}`; (g[k]=g[k]||[]).push(r); });
+  const keys = Object.keys(g).sort((a,b) => {
+    const [ta,tta]=a.split('|||'), [tb,ttb]=b.split('|||');
+    const s=sT(ta,tb); return s!==0?s:(tta==='fixe'?-1:1);
+  });
+  let h = '';
+  keys.forEach(k => {
+    const [terme,type] = k.split('|||');
+    const rows = g[k].sort((a,b) => parseFloat(a.taux)-parseFloat(b.taux));
+    h += `<div class="terme-hdr"><div class="terme-bar"></div><span class="terme-label">${terme}</span>${bTy(type)}<span class="terme-count">${rows.length} offres</span></div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Prêteur</th><th>Produit</th><th>Transaction</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th><th></th></tr></thead><tbody>`;
+    rows.forEach(r => {
+      h += `<tr>
+      <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
+      <td style="color:var(--stone);font-size:12px;max-width:200px">${r.produit||'—'}</td>
+      <td>${bTr(r.type_transaction)}</td><td>${ch(r.rpv)}</td>
+      <td>${ch(r.montant_financement)}</td><td>${ch(r.cote_credit)}</td>
+      <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td>
+      <td>${btnCourriel(r.preteur)}</td></tr>`;
+    });
+    h += '</tbody></table></div>';
+  });
+  el.innerHTML = h;
+}
+
+function renderGrille() {
+  const data = filtered(), el = document.getElementById('tab-grille');
+  if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+  const g = {};
+  data.forEach(r => (g[r.preteur]=g[r.preteur]||[]).push(r));
+  let h = '';
+  Object.entries(g).sort(([a],[b])=>a.localeCompare(b)).forEach(([p,rows]) => {
+    h += `<div class="section-wrap">
+    <div class="section-header">${logo(p,true)}<span class="section-name">${p}</span>${btnCourriel(p)}</div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Produit</th><th>Type</th><th>Transaction</th><th>Terme</th><th>RPV</th><th>Montant</th><th>Cote crédit</th><th>Taux</th><th>En vigueur</th></tr></thead><tbody>`;
+    rows.sort((a,b) => sT(a.terme||'',b.terme||'')).forEach(r => {
+      h += `<tr>
+      <td style="color:var(--stone);font-size:12px;max-width:200px">${r.produit||'—'}</td>
+      <td>${bTy(r.type_taux)}</td><td>${bTr(r.type_transaction)}</td>
+      <td><strong>${r.terme||'—'}</strong></td><td>${ch(r.rpv)}</td>
+      <td>${ch(r.montant_financement)}</td><td>${ch(r.cote_credit)}</td>
+      <td>${fT(r.taux,r.type_taux)}</td><td>${ch(r.date_effectif)}</td></tr>`;
+    });
+    h += '</tbody></table></div></div>';
+  });
+  el.innerHTML = h;
+}
+
+function renderHist() {
+  const el = document.getElementById('tab-historique');
+  const f = getF();
+  const histData = (window._allDataRaw||allData).filter(r =>
+    (!f.terme || r.terme === f.terme) &&
+    (!f.type  || r.type_taux === f.type) &&
+    (!f.trans || r.type_transaction === f.trans) &&
+    (!f.rpv   || r.rpv === f.rpv) &&
+    (!f.pret  || r.preteur === f.pret)
+  );
+  if (!histData.length) { el.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>Aucun taux pour ces filtres.</p></div>'; return; }
+
+  const byDate = {};
+  histData.forEach(r => {
+    const d = r.date_effectif || 'Date inconnue';
+    if (!byDate[d]) byDate[d] = {};
+    byDate[d][r.preteur] = r;
+  });
+
+  let h = '';
+  Object.entries(byDate).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([date, preteurs]) => {
+    const rows = Object.values(preteurs).sort((a,b)=>(a.preteur||'').localeCompare(b.preteur||''));
+    h += `<div class="section-wrap">
+    <div class="section-header">
+      <span class="section-name" style="font-size:20px">${date}</span>
+      <span class="terme-count">${rows.length} prêteurs</span>
+    </div>
+    <div class="tbl-wrap"><table>
+    <thead><tr><th>Prêteur</th><th>Date effective</th><th>Courriel</th></tr></thead><tbody>`;
+    rows.forEach(r => {
+      const key = `${r.preteur}|||${r.date_effectif}`;
+      const hasCourriel = !!historiqueCourrielsByKey[key];
+      const btn = hasCourriel
+        ? `<button class="btn-courriel" onclick="openModalHistorique('${r.preteur.replace(/'/g,"\\'")}','${r.date_effectif}')">📧 Courriel</button>`
+        : '';
+      h += `<tr>
+      <td><div class="preteur-cell">${logo(r.preteur,false)}<span class="preteur-name">${r.preteur||'—'}</span></div></td>
+      <td>${ch(r.date_effectif)}</td>
+      <td>${btn}</td></tr>`;
+    });
+    h += '</tbody></table></div></div>';
+  });
+  el.innerHTML = h;
+}
+
+function openModal(preteur) {
+  const c = courriels[preteur];
+  if (!c) return;
+  document.getElementById('modal-preteur-name').textContent = preteur;
+  document.getElementById('modal-logo').innerHTML = logo(preteur, false);
+
+  let btnPJ = '';
+  if (c.piece_jointe_url) {
+    const ext = (c.piece_jointe_nom||'').split('.').pop().toLowerCase();
+    const icon = ext==='pdf'?'📄':ext==='xlsx'?'📊':'🖼️';
+    btnPJ = `<a href="${c.piece_jointe_url}" target="_blank" class="btn-courriel" style="text-decoration:none;margin-left:8px">${icon} Voir la grille</a>`;
+  }
+
+  document.getElementById('modal-meta').innerHTML = `
+    <span class="modal-meta-item"><strong>De :</strong> ${c.email_from||'—'}</span>
+    <span class="modal-meta-item"><strong>Sujet :</strong> ${c.email_subject||'—'}</span>
+    <span class="modal-meta-item"><strong>En vigueur :</strong> ${c.date_effectif||'—'}</span>
+    ${c.piece_jointe_nom ? `<span class="modal-meta-item"><strong>Pièce jointe :</strong> ${c.piece_jointe_nom}${btnPJ}</span>` : ''}
+  `;
+
+  const body = document.getElementById('modal-body');
+  if (c.email_body_html) {
+    let emailHtml = c.email_body_html || '';
+    const markers = [
+      '---------- Forwarded message ---------',
+      '----------Forwarded message---------',
+      '---------- Message transféré ---------',
+      '---------- Message transmis ---------',
+      'Begin forwarded message',
+    ];
+    let lastIdx = -1;
+    markers.forEach(m => { const i=emailHtml.lastIndexOf(m); if(i>lastIdx) lastIdx=i; });
+    if (lastIdx > -1) emailHtml = emailHtml.substring(lastIdx);
+    body.innerHTML = `<div class="modal-email-frame" style="padding:1rem">${emailHtml}</div>`;
+  } else {
+    body.innerHTML = '<div class="modal-empty">Aucun contenu disponible pour ce prêteur.</div>';
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function openModalHistorique(preteur, date_effectif) {
+  const key = `${preteur}|||${date_effectif}`;
+  const c = historiqueCourrielsByKey[key];
+  if (!c) return;
+  const saved = courriels[preteur];
+  courriels[preteur] = c;
+  openModal(preteur);
+  courriels[preteur] = saved;
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+}
+
+function closeModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModalBtn(); });
+
+async function fetchAllForHistory() {
+  try {
+    window._allDataRaw = await fetchAllPages(
+      `${SUPA_URL}/rest/v1/taux_preteurs?select=${TAUX_COLS}&order=date_effectif.desc,preteur.asc`
+    );
+  } catch(e) {}
+}
+
+fetchData().then(() => fetchAllForHistory());
+</script>
+</body>
+</html>
