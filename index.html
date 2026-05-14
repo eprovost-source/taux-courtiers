@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Taux Hypothécaires — Émulsion</title>
-<link rel="icon" type="image/png" href="https://emulsionhypotheque.ca/wp-content/uploads/2024/09/favicon_EMLS-300x300.png">
+<title>Taux Hypothécaires — Hypothèque Lupien</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -32,7 +31,8 @@ body { font-family: 'Outfit', sans-serif; background: var(--gray); color: var(--
 
 /* HEADER — dark navy with yellow accent */
 .header { background: var(--ink); color: var(--white); padding: 0 2.5rem; height: 76px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(30,30,46,0.15); border-bottom: 3px solid var(--yellow); }
-.header-logo img { height: 42px; width: auto; display: block; filter: brightness(0) invert(1); }
+.header-logo { display: flex; align-items: center; }
+.header-logo img { height: 44px; width: auto; display: block; }
 .header-right { display: flex; align-items: center; gap: 16px; }
 .header-pill { background: var(--yellow); color: var(--ink); font-size: 10px; font-weight: 800; padding: 7px 16px; border-radius: 100px; letter-spacing: 0.16em; text-transform: uppercase; }
 .header-update { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 500; }
@@ -158,7 +158,7 @@ tbody tr:hover td { background: var(--yellow-ghost); }
 
 @media (max-width: 768px) {
   .header { padding: 0 1.25rem; height: 64px; }
-  .header-logo img { height: 32px; }
+  .header-logo img { height: 34px; }
   .hero { padding: 2rem 1.25rem 1.75rem; }
   .hero::before { width: 140px; }
   .hero::after { right: 20px; top: 15px; font-size: 32px; }
@@ -179,8 +179,8 @@ tbody tr:hover td { background: var(--yellow-ghost); }
 
 <header class="header">
   <div class="header-logo">
-    <img src="https://emulsionhypotheque.ca/wp-content/uploads/2024/09/EMULSION_HYPO_LOGO-1.png" alt="Émulsion Hypothèque"
-         onerror="this.parentElement.innerHTML='<span style=\'font-family:Outfit,sans-serif;font-size:22px;color:#ffffff;font-weight:800;letter-spacing:-0.02em\'>ÉMULSION</span>'">
+    <img src="logo.webp" alt="Hypothèque Lupien"
+         onerror="this.parentElement.innerHTML='<span style=\'font-family:Outfit,sans-serif;font-size:18px;color:#5e7a6d;font-weight:700;letter-spacing:0.02em\'>[ HYPOTHÈQUE LUPIEN ]</span>'">
   </div>
   <div class="header-right">
     <span class="header-pill">Courtiers</span>
